@@ -68,7 +68,10 @@ class handler(BaseHTTPRequestHandler):
             def replace(match):
                 return randomly_generated(match.group(1))
             return re.sub(r'\$\{(\w+)\}', replace, template)
-
+        
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
         message = cow.Cowacter().milk(randomly_generated('talk'))
         self.wfile.write(message.encode())
         return
