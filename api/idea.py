@@ -63,12 +63,12 @@ class handler(BaseHTTPRequestHandler):
             ]
         }
 
-        self.send_response(200)
-        self.send_header('Content-type','text/plain')
-        self.end_headers()
-        template = random.choice(productions[nt])
-        def replace(match):
-            return randomly_generated(match.group(1))
-        message = cow.Cowacter().milk(re.sub(r'\$\{(\w+)\}', replace, template))
+        def randomly_generated(nt):
+            template = random.choice(productions[nt])
+            def replace(match):
+                return randomly_generated(match.group(1))
+            return re.sub(r'\$\{(\w+)\}', replace, template)
+
+        message = cow.Cowacter().milk(randomly_generated('talk'))
         self.wfile.write(message.encode())
         return
